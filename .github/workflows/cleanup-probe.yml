@@ -1,0 +1,37 @@
+name: Cleanup probe
+
+# One-shot: removes the .probe/ scratch directory left over from setting up the
+# repository, deletes this workflow in the same commit, and dispatches CI so the
+# resulting head commit has a run of its own.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Remove the scratch directory and retire this workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [ ! -d .probe ]; then
+            echo "nothing to clean"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm -r --quiet .probe
+          git rm --quiet .github/workflows/cleanup-probe.yml
+          git commit -m "Remove the .probe scratch directory and retire the cleanup workflow"
+          git push
+          gh workflow run ci.yml --ref main
