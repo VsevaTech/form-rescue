@@ -1,0 +1,55 @@
+name: Bootstrap lockfile
+
+# One-shot: generates package-lock.json on a clean Node 22 runner, commits it,
+# and deletes this workflow in the same commit. Pushes made with GITHUB_TOKEN do
+# not trigger workflows, so this cannot loop.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Stop if the lockfile already exists
+        id: guard
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Resolve the dependency tree
+        if: steps.guard.outputs.present == 'false'
+        run: npm install --package-lock-only
+
+      - name: Sanity check the result
+        if: steps.guard.outputs.present == 'false'
+        run: |
+          set -euo pipefail
+          test -f package-lock.json
+          node -e "const l=require('./package-lock.json'); if(l.lockfileVersion<3) throw new Error('unexpected lockfile version'); console.log('packages:', Object.keys(l.packages).length)"
+          npm ci
+
+      - name: Commit the lockfile and retire this workflow
+        if: steps.guard.outputs.present == 'false'
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          git rm --quiet .github/workflows/bootstrap-lockfile.yml
+          git commit -m "Add package-lock.json generated on Node 22, and retire the bootstrap workflow"
+          git push
