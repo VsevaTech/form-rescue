@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: lint, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify the built extension layout
+        run: |
+          set -euo pipefail
+          for file in manifest.json content.js background.js popup.html popup.css popup.js; do
+            test -f "dist/$file" || { echo "missing dist/$file"; exit 1; }
+          done
+          test -f dist/icons/icon128.png
+
+      - name: Fail if the content script is not a classic script
+        run: |
+          # MV3 content scripts cannot be ES modules.
+          if grep -Eq '^(import|export) ' dist/content.js; then
+            echo "dist/content.js contains module syntax"
+            exit 1
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: form-rescue-unpacked
+          path: dist
+
+  e2e:
+    name: real Chromium end-to-end
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+
+      - run: npm run build
+
+      - name: Load the extension unpacked and run the full demo
+        # Chrome needs a display to load an unpacked extension.
+        run: xvfb-run -a --server-args="-screen 0 1180x820x24" npm run verify:extension
