@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Form Rescue</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="head">
+        <img class="logo" src="icons/icon32.png" alt="" width="22" height="22" />
+        <h1>Form Rescue</h1>
+      </header>
+
+      <section id="status" class="status" aria-live="polite">
+        <p class="muted">Checking this page…</p>
+      </section>
+
+      <section id="actions" class="actions" hidden>
+        <button id="restore" type="button" class="btn btn-primary">Restore</button>
+        <button id="delete" type="button" class="btn btn-ghost">Delete Draft</button>
+      </section>
+
+      <section class="settings">
+        <label for="ttl">Keep drafts for</label>
+        <select id="ttl">
+          <option value="1">1 day</option>
+          <option value="7">7 days</option>
+          <option value="30">30 days</option>
+        </select>
+      </section>
+
+      <footer class="foot">
+        <span class="dot" aria-hidden="true"></span>
+        Local only. No backend, no sync, no telemetry.
+      </footer>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
