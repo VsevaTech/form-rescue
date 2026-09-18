@@ -1,0 +1,125 @@
+{
+  "draft:http://localhost:8126/": {
+    "fields": [
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "full_name",
+        "kind": "text",
+        "value": "Jeanne Moreau"
+      },
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "email",
+        "kind": "text",
+        "value": "jeanne@acme.com"
+      },
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "phone",
+        "kind": "text",
+        "value": "+971 50 000 0000"
+      },
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "job_title",
+        "kind": "text",
+        "value": "Head of Payments"
+      },
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "company",
+        "kind": "text",
+        "value": "Acme LLC"
+      },
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "team_size",
+        "kind": "text",
+        "value": "42"
+      },
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "address",
+        "kind": "text",
+        "value": "12 Marina Walk"
+      },
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "city",
+        "kind": "text",
+        "value": "Dubai"
+      },
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "postal_code",
+        "kind": "text",
+        "value": "00000"
+      },
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "country",
+        "kind": "select",
+        "value": "ae"
+      },
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "start_date",
+        "kind": "text",
+        "value": "2026-10-01"
+      },
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "comment",
+        "kind": "textarea",
+        "value": "Twenty minutes of careful typing that you really do not want to do twice."
+      },
+      {
+        "by": "name",
+        "formIndex": 0,
+        "index": 0,
+        "key": "preferred_contact",
+        "kind": "radio",
+        "value": "phone"
+      },
+      {
+        "by": "id",
+        "formIndex": 0,
+        "index": 0,
+        "key": "newsletter",
+        "kind": "checkbox",
+        "value": true
+      }
+    ],
+    "origin": "http://localhost:8126",
+    "pageId": "http://localhost:8126/",
+    "path": "/",
+    "savedAt": 1789743029399,
+    "skippedSensitive": 7,
+    "title": "Acme Partner Application — Form Rescue demo",
+    "version": 1
+  }
+}
